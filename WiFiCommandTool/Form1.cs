@@ -25,7 +25,6 @@ namespace WiFiCommandTool
         public Form1()
         {
             InitializeComponent();
-            UpdateUI((int)ProcessStatus.Status_None);
         }
 
         private void Connect_button1_Click(object sender, EventArgs e)
@@ -43,10 +42,10 @@ namespace WiFiCommandTool
             {
                 if (Cmd.Contains("custom=1"))
                 {
+                    //Command Type
                     if (Cmd.Contains("&"))
                     {
                         Cmd = Cmd.Substring(Cmd.IndexOf("&") + 1);
-                        //Command Type
                         if (Cmd.Contains("cmd="))
                         {
                             Cmd_Serialnumber = Cmd.Substring(Cmd.IndexOf("=") + 1, 4);
@@ -61,13 +60,15 @@ namespace WiFiCommandTool
                 }
                 else if (Cmd.Contains(":8192"))
                 {
+                    //Liveview Type
                     globalVar.CommandList.Add(URL_textBox1.Text.ToString());
                     Cmd_Serialnumber = "Liveview";
-                    //Liveview Type
                 }
                 else
                 {
                     //FileSystem Type
+                    globalVar.CommandList.Add(URL_textBox1.Text.ToString());
+                    Cmd_Serialnumber = "FileSystem";
                 }
             }
             else
@@ -78,6 +79,28 @@ namespace WiFiCommandTool
             else
                 Info_listView1.Items.Add(Cmd_Serialnumber);
             Info_listView1.Refresh();
+            URL_textBox1.Clear();
+            if (tabControl1.SelectedIndex == 0)
+            {
+                URL_textBox1.Clear();
+                URL_textBox1.Text = "http://192.168.1.254/?custom=1&";
+                tabControl1_tabPage1_textBox1.Clear();
+                tabControl1_tabPage1_textBox2.Clear();
+            }
+            else if (tabControl1.SelectedIndex == 1)
+            {
+                URL_textBox1.Clear();
+                URL_textBox1.Text = "http://192.168.1.254:";
+                tabControl1_tabPage2_textBox1.Clear();
+            }
+            else if (tabControl1.SelectedIndex == 2)
+            {
+                URL_textBox1.Clear();
+                URL_textBox1.Text = "http://192.168.1.254/";
+                tabControl1_tabPage3_textBox1.Clear();
+                tabControl1_tabPage3_textBox2.Clear();
+            }
+
         }
 
         private void URL_button2_Click(object sender, EventArgs e)
@@ -113,6 +136,7 @@ namespace WiFiCommandTool
             globalVar.IsSocket = false;
             wifi WiFiAPI = new wifi();
             WiFiAPI.ExecuteCommand("netsh wlan disconnect");
+            UpdateUI((int)ProcessStatus.Status_None);
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -151,6 +175,58 @@ namespace WiFiCommandTool
                     }
                 }
                 UpdateUI((int)ProcessStatus.Status_Finish);
+                MessageBox.Show("Command Finish");
+            }
+        }
+
+        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (tabControl1.SelectedIndex == 0)
+            {
+                URL_textBox1.Clear();
+                URL_textBox1.Text = "http://192.168.1.254/?custom=1&";
+            }
+            else if (tabControl1.SelectedIndex == 1)
+            {
+                URL_textBox1.Clear();
+                URL_textBox1.Text = "http://192.168.1.254:";
+            }
+            else if (tabControl1.SelectedIndex == 2)
+            {
+                URL_textBox1.Clear();
+                URL_textBox1.Text = "http://192.168.1.254/";
+            }
+        }
+
+        private void tabControl1_tabPage1_button1_Click(object sender, EventArgs e)
+        {
+            if (tabControl1_tabPage1_textBox1.Text.ToString() != "")
+            {
+                URL_textBox1.Text = string.Concat(URL_textBox1.Text.ToString(), "cmd=", tabControl1_tabPage1_textBox1.Text.ToString());
+                if (tabControl1_tabPage1_textBox2.Text.ToString() != "")
+                {
+                    URL_textBox1.Text = string.Concat(URL_textBox1.Text.ToString(), "&par=", tabControl1_tabPage1_textBox2.Text.ToString());
+                }
+            }
+        }
+
+        private void tabControl1_tabPage2_button1_Click(object sender, EventArgs e)
+        {
+            if (tabControl1_tabPage2_textBox1.Text.ToString() != "")
+            {
+                URL_textBox1.Text = string.Concat(URL_textBox1.Text.ToString(), tabControl1_tabPage2_textBox1.Text.ToString());
+            }
+        }
+
+        private void tabControl1_tabPage3_button1_Click(object sender, EventArgs e)
+        {
+            if (tabControl1_tabPage3_textBox1.Text.ToString() != "" && tabControl1_tabPage3_textBox2.Text.ToString() != "")
+            {
+                URL_textBox1.Text = string.Concat(URL_textBox1.Text.ToString(), tabControl1_tabPage3_textBox1.Text.ToString());
+                if (tabControl1_tabPage3_textBox2.Text.ToString() == "0")
+                {
+                    URL_textBox1.Text = string.Concat(URL_textBox1.Text.ToString(), "?del=1");
+                }
             }
         }
 
