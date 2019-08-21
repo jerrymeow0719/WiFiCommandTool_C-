@@ -1,0 +1,9 @@
+c:\users\jerry1_liu\documents\visual studio 2012\Projects\WiFiCommandTool\WiFiCommandTool\bin\Debug\WiFiCommandTool.exe.config
+c:\users\jerry1_liu\documents\visual studio 2012\Projects\WiFiCommandTool\WiFiCommandTool\bin\Debug\WiFiCommandTool.exe
+c:\users\jerry1_liu\documents\visual studio 2012\Projects\WiFiCommandTool\WiFiCommandTool\bin\Debug\WiFiCommandTool.pdb
+c:\users\jerry1_liu\documents\visual studio 2012\Projects\WiFiCommandTool\WiFiCommandTool\obj\Debug\WiFiCommandTool.csprojResolveAssemblyReference.cache
+c:\users\jerry1_liu\documents\visual studio 2012\Projects\WiFiCommandTool\WiFiCommandTool\obj\Debug\WiFiCommandTool.Form1.resources
+c:\users\jerry1_liu\documents\visual studio 2012\Projects\WiFiCommandTool\WiFiCommandTool\obj\Debug\WiFiCommandTool.Properties.Resources.resources
+c:\users\jerry1_liu\documents\visual studio 2012\Projects\WiFiCommandTool\WiFiCommandTool\obj\Debug\WiFiCommandTool.csproj.GenerateResource.Cache
+c:\users\jerry1_liu\documents\visual studio 2012\Projects\WiFiCommandTool\WiFiCommandTool\obj\Debug\WiFiCommandTool.exe
+c:\users\jerry1_liu\documents\visual studio 2012\Projects\WiFiCommandTool\WiFiCommandTool\obj\Debug\WiFiCommandTool.pdb
