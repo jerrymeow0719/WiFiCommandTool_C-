@@ -29,14 +29,12 @@
         private void InitializeComponent()
         {
             this.groupBox_Connect = new System.Windows.Forms.GroupBox();
+            this.Connect_progressBar1 = new System.Windows.Forms.ProgressBar();
             this.Connet_label1 = new System.Windows.Forms.Label();
             this.Connect_button1 = new System.Windows.Forms.Button();
-            this.shapeContainer2 = new Microsoft.VisualBasic.PowerPacks.ShapeContainer();
-            this.Connect_ovalShape1 = new Microsoft.VisualBasic.PowerPacks.OvalShape();
             this.groupBox_Socket = new System.Windows.Forms.GroupBox();
+            this.Socket_progressBar1 = new System.Windows.Forms.ProgressBar();
             this.Socket_button1 = new System.Windows.Forms.Button();
-            this.shapeContainer1 = new Microsoft.VisualBasic.PowerPacks.ShapeContainer();
-            this.Socket_ovalShape1 = new Microsoft.VisualBasic.PowerPacks.OvalShape();
             this.groupBox_URL = new System.Windows.Forms.GroupBox();
             this.URL_textBox2 = new System.Windows.Forms.TextBox();
             this.URL_button2 = new System.Windows.Forms.Button();
@@ -65,6 +63,7 @@
             this.tabControl1_tabPage3_textBox1 = new System.Windows.Forms.TextBox();
             this.groupBox_Note = new System.Windows.Forms.GroupBox();
             this.Note_textBox1 = new System.Windows.Forms.TextBox();
+            this.button3 = new System.Windows.Forms.Button();
             this.groupBox_Connect.SuspendLayout();
             this.groupBox_Socket.SuspendLayout();
             this.groupBox_URL.SuspendLayout();
@@ -78,9 +77,9 @@
             // 
             // groupBox_Connect
             // 
+            this.groupBox_Connect.Controls.Add(this.Connect_progressBar1);
             this.groupBox_Connect.Controls.Add(this.Connet_label1);
             this.groupBox_Connect.Controls.Add(this.Connect_button1);
-            this.groupBox_Connect.Controls.Add(this.shapeContainer2);
             this.groupBox_Connect.Font = new System.Drawing.Font("Microsoft JhengHei", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.groupBox_Connect.Location = new System.Drawing.Point(12, 12);
             this.groupBox_Connect.Name = "groupBox_Connect";
@@ -88,6 +87,13 @@
             this.groupBox_Connect.TabIndex = 0;
             this.groupBox_Connect.TabStop = false;
             this.groupBox_Connect.Text = "Connect";
+            // 
+            // Connect_progressBar1
+            // 
+            this.Connect_progressBar1.Location = new System.Drawing.Point(9, 22);
+            this.Connect_progressBar1.Name = "Connect_progressBar1";
+            this.Connect_progressBar1.Size = new System.Drawing.Size(52, 23);
+            this.Connect_progressBar1.TabIndex = 4;
             // 
             // Connet_label1
             // 
@@ -109,29 +115,10 @@
             this.Connect_button1.UseVisualStyleBackColor = true;
             this.Connect_button1.Click += new System.EventHandler(this.Connect_button1_Click);
             // 
-            // shapeContainer2
-            // 
-            this.shapeContainer2.Location = new System.Drawing.Point(3, 19);
-            this.shapeContainer2.Margin = new System.Windows.Forms.Padding(0);
-            this.shapeContainer2.Name = "shapeContainer2";
-            this.shapeContainer2.Shapes.AddRange(new Microsoft.VisualBasic.PowerPacks.Shape[] {
-            this.Connect_ovalShape1});
-            this.shapeContainer2.Size = new System.Drawing.Size(144, 58);
-            this.shapeContainer2.TabIndex = 2;
-            this.shapeContainer2.TabStop = false;
-            // 
-            // Connect_ovalShape1
-            // 
-            this.Connect_ovalShape1.FillColor = System.Drawing.Color.DimGray;
-            this.Connect_ovalShape1.FillStyle = Microsoft.VisualBasic.PowerPacks.FillStyle.Solid;
-            this.Connect_ovalShape1.Location = new System.Drawing.Point(5, 0);
-            this.Connect_ovalShape1.Name = "Connect_ovalShape1";
-            this.Connect_ovalShape1.Size = new System.Drawing.Size(30, 30);
-            // 
             // groupBox_Socket
             // 
+            this.groupBox_Socket.Controls.Add(this.Socket_progressBar1);
             this.groupBox_Socket.Controls.Add(this.Socket_button1);
-            this.groupBox_Socket.Controls.Add(this.shapeContainer1);
             this.groupBox_Socket.Font = new System.Drawing.Font("Microsoft JhengHei", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.groupBox_Socket.Location = new System.Drawing.Point(12, 98);
             this.groupBox_Socket.Name = "groupBox_Socket";
@@ -139,6 +126,13 @@
             this.groupBox_Socket.TabIndex = 0;
             this.groupBox_Socket.TabStop = false;
             this.groupBox_Socket.Text = "Socket";
+            // 
+            // Socket_progressBar1
+            // 
+            this.Socket_progressBar1.Location = new System.Drawing.Point(9, 22);
+            this.Socket_progressBar1.Name = "Socket_progressBar1";
+            this.Socket_progressBar1.Size = new System.Drawing.Size(52, 23);
+            this.Socket_progressBar1.TabIndex = 5;
             // 
             // Socket_button1
             // 
@@ -149,25 +143,6 @@
             this.Socket_button1.Text = "Socket";
             this.Socket_button1.UseVisualStyleBackColor = true;
             this.Socket_button1.Click += new System.EventHandler(this.Socket_button1_Click);
-            // 
-            // shapeContainer1
-            // 
-            this.shapeContainer1.Location = new System.Drawing.Point(3, 19);
-            this.shapeContainer1.Margin = new System.Windows.Forms.Padding(0);
-            this.shapeContainer1.Name = "shapeContainer1";
-            this.shapeContainer1.Shapes.AddRange(new Microsoft.VisualBasic.PowerPacks.Shape[] {
-            this.Socket_ovalShape1});
-            this.shapeContainer1.Size = new System.Drawing.Size(144, 58);
-            this.shapeContainer1.TabIndex = 2;
-            this.shapeContainer1.TabStop = false;
-            // 
-            // Socket_ovalShape1
-            // 
-            this.Socket_ovalShape1.FillColor = System.Drawing.Color.DimGray;
-            this.Socket_ovalShape1.FillStyle = Microsoft.VisualBasic.PowerPacks.FillStyle.Solid;
-            this.Socket_ovalShape1.Location = new System.Drawing.Point(5, 0);
-            this.Socket_ovalShape1.Name = "Socket_ovalShape1";
-            this.Socket_ovalShape1.Size = new System.Drawing.Size(30, 30);
             // 
             // groupBox_URL
             // 
@@ -185,14 +160,14 @@
             // 
             // URL_textBox2
             // 
-            this.URL_textBox2.Location = new System.Drawing.Point(276, 52);
+            this.URL_textBox2.Location = new System.Drawing.Point(200, 51);
             this.URL_textBox2.Name = "URL_textBox2";
-            this.URL_textBox2.Size = new System.Drawing.Size(60, 23);
+            this.URL_textBox2.Size = new System.Drawing.Size(65, 23);
             this.URL_textBox2.TabIndex = 5;
             // 
             // URL_button2
             // 
-            this.URL_button2.Location = new System.Drawing.Point(200, 46);
+            this.URL_button2.Location = new System.Drawing.Point(271, 46);
             this.URL_button2.Name = "URL_button2";
             this.URL_button2.Size = new System.Drawing.Size(70, 30);
             this.URL_button2.TabIndex = 3;
@@ -215,14 +190,14 @@
             this.URL_textBox1.Font = new System.Drawing.Font("PMingLiU", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.URL_textBox1.Location = new System.Drawing.Point(6, 18);
             this.URL_textBox1.Name = "URL_textBox1";
-            this.URL_textBox1.Size = new System.Drawing.Size(330, 22);
+            this.URL_textBox1.Size = new System.Drawing.Size(335, 22);
             this.URL_textBox1.TabIndex = 0;
             this.URL_textBox1.Text = "http://192.168.1.254/?custom=1&";
             // 
             // button2
             // 
             this.button2.Font = new System.Drawing.Font("Microsoft JhengHei", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.button2.Location = new System.Drawing.Point(92, 301);
+            this.button2.Location = new System.Drawing.Point(88, 301);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(70, 30);
             this.button2.TabIndex = 2;
@@ -236,7 +211,7 @@
             this.groupBox_Info.Font = new System.Drawing.Font("Microsoft JhengHei", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.groupBox_Info.Location = new System.Drawing.Point(169, 184);
             this.groupBox_Info.Name = "groupBox_Info";
-            this.groupBox_Info.Size = new System.Drawing.Size(345, 147);
+            this.groupBox_Info.Size = new System.Drawing.Size(345, 111);
             this.groupBox_Info.TabIndex = 2;
             this.groupBox_Info.TabStop = false;
             this.groupBox_Info.Text = "Information";
@@ -246,7 +221,7 @@
             this.Info_listView1.FullRowSelect = true;
             this.Info_listView1.Location = new System.Drawing.Point(6, 21);
             this.Info_listView1.Name = "Info_listView1";
-            this.Info_listView1.Size = new System.Drawing.Size(330, 120);
+            this.Info_listView1.Size = new System.Drawing.Size(334, 84);
             this.Info_listView1.TabIndex = 4;
             this.Info_listView1.UseCompatibleStateImageBehavior = false;
             this.Info_listView1.View = System.Windows.Forms.View.List;
@@ -455,12 +430,24 @@
             this.Note_textBox1.Size = new System.Drawing.Size(144, 84);
             this.Note_textBox1.TabIndex = 3;
             this.Note_textBox1.Text = "1.手動完成連線\r\n2.點選Connect按鈕\r\n3.鍵入指令後點選Enter\r\n4.確認URL後點選Add\r\n5.指令流程完成後點選Start";
+            //
+            // button3
+            // 
+            this.button3.Font = new System.Drawing.Font("Microsoft JhengHei", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.button3.Location = new System.Drawing.Point(439, 301);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(70, 30);
+            this.button3.TabIndex = 6;
+            this.button3.Text = "Load\r\n";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(526, 343);
+            this.Controls.Add(this.button3);
             this.Controls.Add(this.groupBox_Note);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.button1);
@@ -496,10 +483,6 @@
         private System.Windows.Forms.GroupBox groupBox_Socket;
         private System.Windows.Forms.Button Connect_button1;
         private System.Windows.Forms.Button Socket_button1;
-        private Microsoft.VisualBasic.PowerPacks.ShapeContainer shapeContainer2;
-        private Microsoft.VisualBasic.PowerPacks.OvalShape Connect_ovalShape1;
-        private Microsoft.VisualBasic.PowerPacks.ShapeContainer shapeContainer1;
-        private Microsoft.VisualBasic.PowerPacks.OvalShape Socket_ovalShape1;
         private System.Windows.Forms.GroupBox groupBox_URL;
         private System.Windows.Forms.TextBox URL_textBox1;
         private System.Windows.Forms.Button URL_button1;
@@ -529,6 +512,9 @@
         private System.Windows.Forms.TextBox tabControl1_tabPage3_textBox1;
         private System.Windows.Forms.GroupBox groupBox_Note;
         private System.Windows.Forms.TextBox Note_textBox1;
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.ProgressBar Connect_progressBar1;
+        private System.Windows.Forms.ProgressBar Socket_progressBar1;
     }
 }
 
