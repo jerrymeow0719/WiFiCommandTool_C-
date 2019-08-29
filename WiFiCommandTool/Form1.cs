@@ -208,7 +208,7 @@ namespace WiFiCommandTool
                         URL = String.Concat(URL, "&par=", tabControl1_tabPage1_textBox2.Text.ToString());
                     else if (tabControl1_tabPage1_textBox3.Text.ToString() == "str")
                         URL = String.Concat(URL, "&str=", tabControl1_tabPage1_textBox2.Text.ToString());
-                    Info_listView1.Items.Add(tabControl1_tabPage1_textBox1.Text.ToString() + " , " + tabControl1_tabPage1_textBox3.Text.ToString());
+                    Info_listView1.Items.Add(tabControl1_tabPage1_textBox1.Text.ToString() + " , " + tabControl1_tabPage1_textBox2.Text.ToString());
                 }
                 else
                     Info_listView1.Items.Add(tabControl1_tabPage1_textBox1.Text.ToString());
