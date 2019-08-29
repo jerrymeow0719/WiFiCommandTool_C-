@@ -29,91 +29,6 @@ namespace WiFiCommandTool
             InitializeComponent();
         }
 
-        private void Connect_button1_Click(object sender, EventArgs e)
-        {
-            globalVar.ConnectSSID = CheckConnect();
-            UpdateUI((int)ProcessStatus.Status_Connect);
-        }
-
-        private void URL_button1_Click(object sender, EventArgs e)
-        {
-            string Cmd = URL_textBox1.Text.ToString();
-            string Cmd_Serialnumber = "";
-            string Cmd_Parameter = "";
-            if (Cmd.Contains("192.168.1.254"))
-            {
-                if (Cmd.Contains("custom=1"))
-                {
-                    //Command Type
-                    if (Cmd.Contains("&"))
-                    {
-                        Cmd = Cmd.Substring(Cmd.IndexOf("&") + 1);
-                        if (Cmd.Contains("cmd="))
-                        {
-                            Cmd_Serialnumber = Cmd.Substring(Cmd.IndexOf("=") + 1, 4);
-                            if (Cmd.Contains("&"))
-                            {
-                                Cmd = Cmd.Substring(Cmd.IndexOf("&") + 1);
-                                Cmd_Parameter = Cmd.Substring(Cmd.IndexOf("=") + 1);
-                            }
-                        }
-                    }
-                    globalVar.CommandList.Add(URL_textBox1.Text.ToString());
-                }
-                else if (Cmd.Contains(":"))
-                {
-                    //Liveview Type
-                    globalVar.CommandList.Add(URL_textBox1.Text.ToString());
-                    Cmd_Serialnumber = "Liveview";
-                }
-                else
-                {
-                    //FileSystem Type
-                    globalVar.CommandList.Add(URL_textBox1.Text.ToString());
-                    Cmd_Serialnumber = "FileSystem";
-                }
-            }
-            else
-            { MessageBox.Show("Illegal URL!!"); }
-
-            if (Cmd_Parameter != "")
-                Info_listView1.Items.Add(Cmd_Serialnumber + " , " + Cmd_Parameter);
-            else
-                Info_listView1.Items.Add(Cmd_Serialnumber);
-            Info_listView1.Refresh();
-            URL_textBox1.Clear();
-            if (tabControl1.SelectedIndex == 0)
-            {
-                URL_textBox1.Clear();
-                URL_textBox1.Text = "http://192.168.1.254/?custom=1&";
-                tabControl1_tabPage1_textBox1.Clear();
-                tabControl1_tabPage1_textBox2.Clear();
-            }
-            else if (tabControl1.SelectedIndex == 1)
-            {
-                URL_textBox1.Clear();
-                URL_textBox1.Text = "http://192.168.1.254:";
-                tabControl1_tabPage2_textBox1.Clear();
-            }
-            else if (tabControl1.SelectedIndex == 2)
-            {
-                URL_textBox1.Clear();
-                URL_textBox1.Text = "http://192.168.1.254/";
-                tabControl1_tabPage3_textBox1.Clear();
-                tabControl1_tabPage3_textBox2.Clear();
-            }
-
-        }
-
-        private void URL_button2_Click(object sender, EventArgs e)
-        {
-            if (URL_textBox2.Text.ToString() != "")
-            {
-                globalVar.CommandList.Add("Delay," + URL_textBox2.Text.ToString());
-                Info_listView1.Items.Add("Delay" + " , " + URL_textBox2.Text.ToString());
-            }
-        }
-
         private void Info_listView1_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             if (Info_listView1.Focused)
@@ -125,17 +40,9 @@ namespace WiFiCommandTool
             }
         }
 
-        private void Socket_button1_Click(object sender, EventArgs e)
-        {
-            globalVar.CommandList.Add("Socket");
-            Info_listView1.Items.Add("Socket");
-        }
-
         private void button1_Click(object sender, EventArgs e)
         {
             globalVar.CommandList.Clear();
-            globalVar.IsConnect = false;
-            globalVar.IsSocket = false;
             wifi WiFiAPI = new wifi();
             WiFiAPI.ExecuteCommand("netsh wlan disconnect");
             UpdateUI((int)ProcessStatus.Status_None);
@@ -148,47 +55,52 @@ namespace WiFiCommandTool
             wifi WifiAPI = new wifi();
             string sURL = "";
             Stopwatch sw = new Stopwatch();
-            if (globalVar.IsConnect)
+            int index = 0;
+            for (index = 0; index < globalVar.CommandList.Count; index++)
             {
-                if (URL_textBox1.Text.ToString() != "" && globalVar.CommandList.Count == 0)
+                sw.Reset();
+                sw.Start();
+                Info_listView1.Items[index].Selected = true;
+                Info_listView1.Select();
+                if (Info_listView1.Items[index].Text.ToString().Contains("Connect"))
                 {
-                    sURL = URL_textBox1.Text.ToString();
-                    WifiAPI.ExecuteHTTPCommand(sURL);
+                    string URLConnet = Info_listView1.Items[index].Text.ToString();
+                    string SSID = "";
+                    URLConnet = URLConnet.Substring(URLConnet.IndexOf(",") + 1);
+                    SSID = URLConnet.Substring(0, URLConnet.IndexOf(","));
+                    URLConnet = URLConnet.Substring(URLConnet.IndexOf(",") + 1);
+                    if (URLConnet == "0")
+                        ExecuteConnect(SSID, false);
+                    else
+                        ExecuteConnect(SSID, true);
+                }
+                if (Info_listView1.Items[index].Text.ToString().Contains("Socket"))
+                {
+                    if (Info_listView1.Items[index].Text.ToString().Contains("0"))
+                        ExecuteSocketConnect(false);
+                    else
+                        ExecuteSocketConnect(true);
+                }
+                else if (Info_listView1.Items[index].Text.ToString().Contains("Delay"))
+                {
+                    int sleepMS = Convert.ToInt32(Info_listView1.Items[index].Text.ToString().Substring(Info_listView1.Items[index].Text.ToString().IndexOf(",") + 2));
+                    System.Threading.Thread.Sleep(sleepMS);
                 }
                 else
                 {
-                    int index = 0;
-                    for (index = 0; index < globalVar.CommandList.Count; index++)
-                    {
-                        sw.Reset();
-                        sw.Start();
-                        Info_listView1.Items[index].Selected = true;
-                        Info_listView1.Select();
-                        if (Info_listView1.Items[index].Text.ToString().Contains("Socket"))
-                        {
-                            ExecuteSocketConnect();
-                        }
-                        else if (Info_listView1.Items[index].Text.ToString().Contains("Delay"))
-                        {
-                            int sleepMS = Convert.ToInt32(Info_listView1.Items[index].Text.ToString().Substring(Info_listView1.Items[index].Text.ToString().IndexOf(",") + 2));
-                            System.Threading.Thread.Sleep(sleepMS);
-                        }
-                        else
-                        {
-                            sURL = globalVar.CommandList[index].ToString();
-                            WifiAPI.ExecuteHTTPCommand(sURL);
-                        }
-                        sw.Stop();
-                        TimeEstimation[index] = sw.Elapsed.TotalMilliseconds;
-                    }
+                    sURL = globalVar.CommandList[index].ToString();
+                    WifiAPI.ExecuteHTTPCommand(sURL);
                 }
-                UpdateUI((int)ProcessStatus.Status_Finish);
-                foreach (int element in TimeEstimation)
-                {
-                    Console.WriteLine(element.ToString());
-                }
-                MessageBox.Show("Command Finish");
+                sw.Stop();
+                TimeEstimation[index] = sw.Elapsed.TotalMilliseconds;
             }
+
+            UpdateUI((int)ProcessStatus.Status_Finish);
+            foreach (int element in TimeEstimation)
+            {
+                Console.WriteLine(element.ToString());
+            }
+            MessageBox.Show("Command Finish");
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -201,6 +113,8 @@ namespace WiFiCommandTool
             {
                 globalVar.ScriptPath = dialog.FileName;
             }
+            else
+                return;
 
             string ConnStr = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + globalVar.ScriptPath + ";Extended Properties='Excel 8.0;HDR=Yes;IMEX=1;Mode=Read'";
             OleDbConnection ODConn;
@@ -231,7 +145,7 @@ namespace WiFiCommandTool
                         case "Command":
                             ScriptCommandCount++;
                             ScriptCommandURL = String.Concat("http://192.168.1.254/?custom=1&cmd=", dr["ID"].ToString());
-                            if (dr["Parameter"].ToString() != "")
+                            if (dr["Parameter"].ToString() != "" && dr["Parameter"].ToString() != "NULL")
                             {
                                 if(dr["Parameter Type"].ToString() == "par")
                                     ScriptCommandURL = String.Concat(ScriptCommandURL, "&par=", dr["Parameter"].ToString());
@@ -244,7 +158,7 @@ namespace WiFiCommandTool
                             break;
                         case "Liveview":
                             ScriptCommandCount++;
-                            if(dr["Parameter"].ToString() != "")
+                            if(dr["Parameter"].ToString() != "" && dr["Parameter"].ToString() != "NULL")
                                 ScriptCommandURL = String.Concat("http://192.168.1.254:", dr["Parameter"].ToString());
                             else
                                 ScriptCommandURL = String.Concat("http://192.168.1.254:", "8192");
@@ -260,10 +174,15 @@ namespace WiFiCommandTool
                             }
                             Info_listView1.Items.Add("FileSystem");
                             break;
+                        case "Connect":
+                            ScriptCommandCount++;
+                            ScriptCommandURL = "Connect," + dr["ID"].ToString() + "," + dr["Parameter"].ToString();
+                            Info_listView1.Items.Add("Connect" + " , " + dr["ID"].ToString() + " , " + dr["Parameter"].ToString());
+                            break;
                         case "Socket":
                             ScriptCommandCount++;
-                            ScriptCommandURL = "Socket";
-                            Info_listView1.Items.Add("Socket");
+                            ScriptCommandURL = "Socket," + dr["Parameter"].ToString();
+                            Info_listView1.Items.Add("Socket" + " , " + dr["Parameter"].ToString());
                             break;
                         case "Delay":
                             ScriptCommandCount++;
@@ -277,69 +196,107 @@ namespace WiFiCommandTool
             }
         }
 
-        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (tabControl1.SelectedIndex == 0)
-            {
-                URL_textBox1.Clear();
-                URL_textBox1.Text = "http://192.168.1.254/?custom=1&";
-            }
-            else if (tabControl1.SelectedIndex == 1)
-            {
-                URL_textBox1.Clear();
-                URL_textBox1.Text = "http://192.168.1.254:";
-            }
-            else if (tabControl1.SelectedIndex == 2)
-            {
-                URL_textBox1.Clear();
-                URL_textBox1.Text = "http://192.168.1.254/";
-            }
-        }
-
         private void tabControl1_tabPage1_button1_Click(object sender, EventArgs e)
         {
             if (tabControl1_tabPage1_textBox1.Text.ToString() != "")
             {
-                URL_textBox1.Text = String.Concat(URL_textBox1.Text.ToString(), "cmd=", tabControl1_tabPage1_textBox1.Text.ToString());
+                string URL = "";
+                URL = String.Concat("http://192.168.1.254/?custom=1&cmd=", tabControl1_tabPage1_textBox1.Text.ToString());
                 if (tabControl1_tabPage1_textBox2.Text.ToString() != "")
                 {
-                    URL_textBox1.Text = String.Concat(URL_textBox1.Text.ToString(), "&par=", tabControl1_tabPage1_textBox2.Text.ToString());
+                    if (tabControl1_tabPage1_textBox3.Text.ToString() == "par")
+                        URL = String.Concat(URL, "&par=", tabControl1_tabPage1_textBox2.Text.ToString());
+                    else if (tabControl1_tabPage1_textBox3.Text.ToString() == "str")
+                        URL = String.Concat(URL, "&str=", tabControl1_tabPage1_textBox2.Text.ToString());
+                    Info_listView1.Items.Add(tabControl1_tabPage1_textBox1.Text.ToString() + " , " + tabControl1_tabPage1_textBox3.Text.ToString());
                 }
+                else
+                    Info_listView1.Items.Add(tabControl1_tabPage1_textBox1.Text.ToString());
+                globalVar.CommandList.Add(URL);
             }
         }
 
         private void tabControl1_tabPage2_button1_Click(object sender, EventArgs e)
         {
+            string URL = "";
             if (tabControl1_tabPage2_textBox1.Text.ToString() != "")
             {
-                URL_textBox1.Text = String.Concat(URL_textBox1.Text.ToString(), tabControl1_tabPage2_textBox1.Text.ToString());
+                URL = String.Concat("http://192.168.1.254:" + tabControl1_tabPage2_textBox1.Text.ToString());
             }
+            else
+            {
+                URL = "http://192.168.1.254:8192";
+            }
+            Info_listView1.Items.Add("Liveview");
+            globalVar.CommandList.Add(URL);
         }
 
         private void tabControl1_tabPage3_button1_Click(object sender, EventArgs e)
         {
             if (tabControl1_tabPage3_textBox1.Text.ToString() != "" && tabControl1_tabPage3_textBox2.Text.ToString() != "")
             {
-                URL_textBox1.Text = String.Concat(URL_textBox1.Text.ToString(), tabControl1_tabPage3_textBox1.Text.ToString());
+                string URL = "";
+                URL = String.Concat("http://192.168.1.254/", tabControl1_tabPage3_textBox1.Text.ToString());
                 if (tabControl1_tabPage3_textBox2.Text.ToString() == "0")
-                {
-                    URL_textBox1.Text = String.Concat(URL_textBox1.Text.ToString(), "?del=1");
-                }
+                    URL = String.Concat(URL, "?del=1");
+                Info_listView1.Items.Add("FileSystem");
+                globalVar.CommandList.Add(URL);
             }
         }
 
-        private void ExecuteSocketConnect()
+        private void tabControl1_tabPage4_button1_Click(object sender, EventArgs e)
         {
-            if (globalVar.IsConnect)
+            if (tabControl1_tabPage4_textBox1.Text.ToString() != "" && tabControl1_tabPage4_textBox2.Text.ToString() != "")
+            {
+                string URL = "";
+                URL = "Connect," + tabControl1_tabPage4_textBox1.Text.ToString() + "," + tabControl1_tabPage4_textBox2.Text.ToString();
+                Info_listView1.Items.Add("Connect" + " , " + tabControl1_tabPage4_textBox1.Text.ToString() + " , " + tabControl1_tabPage4_textBox2.Text.ToString());
+                globalVar.CommandList.Add(URL);
+            }
+        }
+
+        private void tabControl1_tabPage5_button1_Click(object sender, EventArgs e)
+        {
+            if (tabControl1_tabPage5_textBox1.Text.ToString() != "")
+            {
+                string URL = "";
+                URL = "Socket," + tabControl1_tabPage5_textBox1.Text.ToString();
+                Info_listView1.Items.Add("Socket" + " , " + tabControl1_tabPage5_textBox1.Text.ToString());
+            }
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            if (tabControl1_tabPage6_textBox1.Text.ToString() != "")
+            {
+                string URL = "";
+                URL = "Delay," + tabControl1_tabPage6_textBox1.Text.ToString();
+                Info_listView1.Items.Add("Delay" + " , " + tabControl1_tabPage6_textBox1.Text.ToString());
+            }
+        }
+
+        private void ExecuteConnect(string SSID, bool establish)
+        {
+            wifi wifiAPI = new wifi();
+            if (establish)
+            {
+                wifiAPI.EnumerateNICs(SSID);
+            }
+            else
+            {
+                wifiAPI.ExecuteCommand("netsh wlan disconnect");
+            }
+
+        }
+
+        private void ExecuteSocketConnect(bool establish)
+        {
+            if (establish)
             {
                 try
                 {
                     SckSPort = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                     SckSPort.Connect(new IPEndPoint(IPAddress.Parse(RmIP), SPort)); //RmIp和SPort分別為string和int型態, 前者為Server端的IP, 後者為Server端的Port
-                    globalVar.IsSocket = SckSPort.Connected;
-                    Socket_progressBar1.Value = (globalVar.IsSocket) ? 100 : 0;
-                    if (!globalVar.IsSocket)
-                        MessageBox.Show("Connect to Socket fail!!");
 
                     //Thread SckSReceiveTd = new Thread(SckSReceiveProc);
                     //SckSReceiveTd.Start();
@@ -347,7 +304,10 @@ namespace WiFiCommandTool
                 catch { }
             }
             else
-                MessageBox.Show("Please connet to WiFi first!!");
+            {
+                SckSPort.Disconnect(true);
+                SckSPort.Dispose();
+            }
         }
 
         private void SckSReceiveProc()
@@ -363,34 +323,11 @@ namespace WiFiCommandTool
                 }
         }
 
-        private string CheckConnect()
-        {
-            wifi wifiAPI = new wifi();
-            globalVar.IsConnect = wifiAPI.EnumerateNICs();
-            string nSSID = "";
-            nSSID = wifiAPI.GetConnectSSID();
-            return nSSID;
-        }
-
         private void UpdateUI(int status)
         {
             switch (status)
             {
                 case (int)ProcessStatus.Status_None:
-                    groupBox_Connect.Enabled = true;
-                    Connect_button1.Enabled = true;
-                    Connet_label1.Text = "SSID";
-                    Connect_progressBar1.Value = 0;
-                    groupBox_Socket.Enabled = true;
-                    Socket_button1.Enabled = true;
-                    Socket_progressBar1.Value = 0;
-                    groupBox_URL.Enabled = true;
-                    URL_button1.Enabled = true;
-                    URL_button2.Enabled = true;
-                    URL_textBox1.ReadOnly = false;
-                    URL_textBox2.ReadOnly = false;
-                    URL_textBox1.Clear();
-                    URL_textBox2.Clear();
                     groupBox_Info.Enabled = true;
                     Info_listView1.Enabled = true;
                     Info_listView1.Clear();
@@ -399,20 +336,6 @@ namespace WiFiCommandTool
                     button3.Enabled = true;
                     break;
                 case (int)ProcessStatus.Status_Connect:
-                    groupBox_Connect.Enabled = true;
-                    Connect_button1.Enabled = true;
-                    Connet_label1.Text = (globalVar.IsConnect) ? globalVar.ConnectSSID : "SSID";
-                    Connect_progressBar1.Value = (globalVar.IsConnect) ? 100 : 0;
-                    groupBox_Socket.Enabled = true;
-                    Socket_button1.Enabled = true;
-                    Socket_progressBar1.Value = (globalVar.IsSocket) ? 100 : 0;
-                    groupBox_URL.Enabled = true;
-                    URL_textBox1.ReadOnly = false;
-                    URL_textBox2.ReadOnly = false;
-                    URL_button1.Enabled = true;
-                    URL_button2.Enabled = true;
-                    //URL_textBox1.Clear();
-                    //URL_textBox2.Clear();
                     groupBox_Info.Enabled = true;
                     Info_listView1.Enabled = true;
                     //Info_listView1.Clear();
@@ -421,20 +344,6 @@ namespace WiFiCommandTool
                     button3.Enabled = true;
                     break;
                 case (int)ProcessStatus.Status_Start:
-                    groupBox_Connect.Enabled = true;
-                    Connect_button1.Enabled = false;
-                    Connet_label1.Text = (globalVar.IsConnect) ? globalVar.ConnectSSID : "SSID";
-                    Connect_progressBar1.Value = (globalVar.IsConnect) ? 100 : 0;
-                    groupBox_Socket.Enabled = true;
-                    Socket_button1.Enabled = false;
-                    Socket_progressBar1.Value = (globalVar.IsSocket) ? 100 : 0;
-                    groupBox_URL.Enabled = false;
-                    URL_button1.Enabled = false;
-                    URL_button2.Enabled = false;
-                    URL_textBox1.ReadOnly = true;
-                    URL_textBox2.ReadOnly = true;
-                    //URL_textBox1.Clear();
-                    //URL_textBox2.Clear();
                     groupBox_Info.Enabled = false;
                     Info_listView1.Enabled = false;
                     //Info_listView1.Clear();
@@ -443,20 +352,6 @@ namespace WiFiCommandTool
                     button3.Enabled = false;
                     break;
                 case (int)ProcessStatus.Status_Finish:
-                    groupBox_Connect.Enabled = true;
-                    Connect_button1.Enabled = true;
-                    Connet_label1.Text = (globalVar.IsConnect) ? globalVar.ConnectSSID : "SSID";
-                    Connect_progressBar1.Value = (globalVar.IsConnect) ? 100 : 0;
-                    groupBox_Socket.Enabled = true;
-                    Socket_button1.Enabled = true;
-                    Socket_progressBar1.Value = (globalVar.IsSocket) ? 100 : 0;
-                    groupBox_URL.Enabled = true;
-                    URL_button1.Enabled = true;
-                    URL_button2.Enabled = true;
-                    URL_textBox1.ReadOnly = false;
-                    URL_textBox2.ReadOnly = false;
-                    //URL_textBox1.Clear();
-                    //URL_textBox2.Clear();
                     groupBox_Info.Enabled = true;
                     Info_listView1.Enabled = true;
                     //Info_listView1.Clear();
@@ -470,9 +365,6 @@ namespace WiFiCommandTool
 
     public static class globalVar
     {
-        public static string ConnectSSID = "";
-        public static bool IsConnect = false;
-        public static bool IsSocket = false;
         public static List<string> CommandList = new List<string>();
         public static string ScriptPath = "";
     }
@@ -624,29 +516,37 @@ namespace WiFiCommandTool
         /// <summary>
         /// enumerate wireless network adapters using wifi api
         /// </summary>
-        public bool EnumerateNICs()
+        public bool EnumerateNICs(string SSID)
         {
             uint version = 2;
             uint serviceVersion = 0;
             IntPtr handle = IntPtr.Zero;
             bool connectPass = false;
-            IntPtr ppInterfaceList = IntPtr.Zero;
-            WLAN_INTERFACE_INFO_LIST interfaceList;
+            int connetCount = 0;
             //Open WLAN handler
             try
             {
                 if (WlanOpenHandle(version, IntPtr.Zero, out serviceVersion, ref handle) == ERROR_SUCCESS)
                 {
-                    //Enumerates all of the wireless LAN interfaces currently enabled
-                    if (WlanEnumInterfaces(handle, IntPtr.Zero, ref ppInterfaceList) == ERROR_SUCCESS)
+                    while (connetCount < 3 && connectPass == false)
                     {
-                        //Tranfer all values from IntPtr to WLAN_INTERFACE_INFO_LIST structure 
-                        interfaceList = new WLAN_INTERFACE_INFO_LIST(ppInterfaceList);
-                        //檢查是否連線成功
-                        if (getStateDescription(interfaceList.InterfaceInfo[0].isState) == "connected")
-                            connectPass = true;
-                        if (ppInterfaceList != IntPtr.Zero)
-                            WlanFreeMemory(ppInterfaceList);
+                        IntPtr ppInterfaceList = IntPtr.Zero;
+                        WLAN_INTERFACE_INFO_LIST interfaceList;
+                        ExecuteCommand("netsh wlan connect name=" + SSID + " ssid=" + SSID);
+                        System.Threading.Thread.Sleep(500);
+                        //Enumerates all of the wireless LAN interfaces currently enabled
+                        if (WlanEnumInterfaces(handle, IntPtr.Zero, ref ppInterfaceList) == ERROR_SUCCESS)
+                        {
+                            //Tranfer all values from IntPtr to WLAN_INTERFACE_INFO_LIST structure 
+                            interfaceList = new WLAN_INTERFACE_INFO_LIST(ppInterfaceList);
+                            //檢查是否連線成功
+                            if (getStateDescription(interfaceList.InterfaceInfo[0].isState) == "connected")
+                                connectPass = true;
+                            else
+                                connetCount++;
+                            if (ppInterfaceList != IntPtr.Zero)
+                                WlanFreeMemory(ppInterfaceList);
+                        }
                     }
                     WlanCloseHandle(handle, IntPtr.Zero);
                 }
