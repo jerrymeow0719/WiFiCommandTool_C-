@@ -138,6 +138,8 @@ namespace WiFiCommandTool
             foreach (DataRow dr in dt.Rows)
             {
                 ScriptCommandURL = "";
+                if (dr["Case"].ToString() == "")
+                    return;
                 if (Convert.ToInt32(dr["Case"].ToString()) == ScriptCommandCount + 1)
                 {
                     switch (dr["Type"].ToString())
@@ -188,6 +190,14 @@ namespace WiFiCommandTool
                             ScriptCommandCount++;
                             ScriptCommandURL = "Delay," + dr["Parameter"].ToString();
                             Info_listView1.Items.Add("Delay" + " , " + dr["Parameter"].ToString());
+                            break;
+                        case "Thumb":
+                            ScriptCommandCount++;
+                            if (dr["ID"].ToString() != "")
+                            {
+                                ScriptCommandURL = String.Concat("http://192.168.1.254/", dr["ID"].ToString(),"?custom=1&cmd=6003");
+                                Info_listView1.Items.Add("Thumb" + " , " + dr["ID"].ToString());
+                            }
                             break;
                     }
                     globalVar.CommandList.Add(ScriptCommandURL);
@@ -262,6 +272,7 @@ namespace WiFiCommandTool
                 string URL = "";
                 URL = "Socket," + tabControl1_tabPage5_textBox1.Text.ToString();
                 Info_listView1.Items.Add("Socket" + " , " + tabControl1_tabPage5_textBox1.Text.ToString());
+                globalVar.CommandList.Add(URL);
             }
         }
 
@@ -272,6 +283,7 @@ namespace WiFiCommandTool
                 string URL = "";
                 URL = "Delay," + tabControl1_tabPage6_textBox1.Text.ToString();
                 Info_listView1.Items.Add("Delay" + " , " + tabControl1_tabPage6_textBox1.Text.ToString());
+                globalVar.CommandList.Add(URL);
             }
         }
 
